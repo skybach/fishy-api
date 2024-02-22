@@ -9,7 +9,9 @@
     "swagger-tools": "^0.10.4"
   },
   "scripts": {
-    "start": "node index.js",
+    "dev": "node index.js",
+    "start": "docker-compose up -d --build",
+    "build-image": "docker image build -t fishy-api .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
