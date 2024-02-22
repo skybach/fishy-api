@@ -1,0 +1,137 @@
+---
+swagger: "2.0"
+info:
+  description: "Implementation for the interview challenge"
+  version: "1.0"
+  title: "Interview challenge"
+  contact: {}
+basePath: "/v1"
+paths:
+  /history:
+    get:
+      tags:
+      - "history"
+      summary: "List queries"
+      description: "List queries"
+      operationId: "queries_history"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        "200":
+          description: "OK"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/model.Query"
+        "400":
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/utils.HTTPError"
+      x-swagger-router-controller: "History"
+  /tools/lookup:
+    get:
+      tags:
+      - "tools"
+      summary: "Lookup domain"
+      description: "Lookup domain and return all IPv4 addresses"
+      operationId: "lookup_domain"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "domain"
+        in: "query"
+        description: "Domain name"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "OK"
+          schema:
+            $ref: "#/definitions/model.Query"
+        "400":
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/utils.HTTPError"
+        "404":
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/utils.HTTPError"
+      x-swagger-router-controller: "Tools"
+  /tools/validate:
+    post:
+      tags:
+      - "tools"
+      summary: "Simple IP validation"
+      description: "Simple IP valication"
+      operationId: "validate_ip"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "request"
+        description: "IP to validate"
+        required: true
+        schema:
+          $ref: "#/definitions/handler.ValidateIPRequest"
+      responses:
+        "200":
+          description: "OK"
+          schema:
+            $ref: "#/definitions/handler.ValidateIPResponse"
+        "400":
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/utils.HTTPError"
+      x-swagger-router-controller: "Tools"
+definitions:
+  handler.ValidateIPRequest:
+    type: "object"
+    properties:
+      ip:
+        type: "string"
+  handler.ValidateIPResponse:
+    type: "object"
+    properties:
+      status:
+        type: "boolean"
+    example:
+      status: true
+  model.Address:
+    type: "object"
+    properties:
+      ip:
+        type: "string"
+    example:
+      ip: "ip"
+  model.Query:
+    type: "object"
+    properties:
+      addresses:
+        type: "array"
+        items:
+          $ref: "#/definitions/model.Address"
+      client_ip:
+        type: "string"
+      created_at:
+        type: "integer"
+      domain:
+        type: "string"
+    example:
+      addresses:
+      - ip: "ip"
+      - ip: "ip"
+      domain: "domain"
+      created_at: 0
+      client_ip: "client_ip"
+  utils.HTTPError:
+    type: "object"
+    properties:
+      message:
+        type: "string"

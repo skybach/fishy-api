@@ -1,0 +1,25 @@
+{
+  "name": "fishy-api",
+  "description": "## Coding Challenge",
+  "version": "1.0.0",
+  "main": "index.js",
+  "dependencies": {
+    "connect": "^3.7.0",
+    "js-yaml": "^4.1.0",
+    "swagger-tools": "^0.10.4"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/skybach/fishy-api.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/skybach/fishy-api/issues"
+  },
+  "homepage": "https://github.com/skybach/fishy-api#readme"
+}
