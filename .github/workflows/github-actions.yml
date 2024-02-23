@@ -19,10 +19,12 @@ jobs:
   Test:
     runs-on: ubuntu-latest
     steps:
+      - uses: ./
       - run: npm run test
   Build:
     runs-on: ubuntu-latest
     steps:
+      - uses: ./
       - run: npm run build
   Package:
     runs-on: ubuntu-latest
