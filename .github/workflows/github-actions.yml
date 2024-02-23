@@ -19,12 +19,12 @@ jobs:
   Test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout
       - run: npm run test
   Build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout
       - run: npm run build
   Package:
     runs-on: ubuntu-latest
