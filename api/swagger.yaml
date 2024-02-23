@@ -7,6 +7,51 @@ info:
   contact: {}
 basePath: "/v1"
 paths:
+  /:
+    get:
+      tags:
+      - "info"
+      summary: "API Info"
+      description: "Info"
+      operationId: "info"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        "200":
+          description: "OK"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/handler.Info"
+        "400":
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/utils.HTTPError"
+      x-swagger-router-controller: "Info"
+  /health:
+    get:
+      tags:
+      - "health"
+      summary: "API Health"
+      description: "Health"
+      operationId: "health"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        "200":
+          description: "OK"
+          schema: {}
+        "400":
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/utils.HTTPError"
+      x-swagger-router-controller: "Health"
   /history:
     get:
       tags:
@@ -91,6 +136,19 @@ paths:
             $ref: "#/definitions/utils.HTTPError"
       x-swagger-router-controller: "Tools"
 definitions:
+  handler.Info:
+    type: "object"
+    properties:
+      version:
+        type: "string"
+      date:
+        type: "integer"
+      kubernetes:
+        type: "boolean"
+    example:
+      date: 0
+      kubernetes: true
+      version: "version"
   handler.ValidateIPRequest:
     type: "object"
     properties:
