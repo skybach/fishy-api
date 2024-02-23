@@ -10,7 +10,7 @@ const { respondWithCode } = require('../utils/writer');
  * domain String Domain name
  * returns model.Query
  **/
-exports.lookup_domain = function (domain) {
+exports.lookup_domain = function (domain, clientIp) {
   return new Promise(function (resolve, reject) {
 
     // Lookup the IP addresses associated with the domain
@@ -27,14 +27,14 @@ exports.lookup_domain = function (domain) {
               return {ip: ip.address}
             }),
             domain: domain,
+            client_ip: clientIp,
             created_at: Date.now()
           }
           
           // insert into db before resolving promise
-          console.log('process.env.MYSQL_LOOKUP_TABLE', process.env.MYSQL_LOOKUP_TABLE)
-          pool.query(`insert into ${process.env.MYSQL_LOOKUP_TABLE} (domain_name, ipv4_addresses) values(?, ?)`, [domain, JSON.stringify(payload.addresses)], (err, result) => {
+          pool.query(`insert into ${process.env.MYSQL_LOOKUP_TABLE} (domain_name, ipv4_addresses, client_ip) values(?, ?, ?)`, [domain, JSON.stringify(payload.addresses), clientIp], (err, result) => {
             if (err) {
-              console.log('err', err)
+              console.log(err)
               reject({
                 message: 'Unable to insert into db'
               });      

@@ -5,9 +5,9 @@ var Tools = require('../service/ToolsService');
 
 module.exports.lookup_domain = function lookup_domain (req, res, next) {
   var domain = req.swagger.params['domain'].value;
-  Tools.lookup_domain(domain)
+  const clientIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress; // get request ip or x-fwded ip
+  Tools.lookup_domain(domain, clientIp)
     .then(function (response) {
-      response.client_ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress; // get request ip or x-fwded ip
       utils.writeJson(res, response);
     })
     .catch(function (response) {

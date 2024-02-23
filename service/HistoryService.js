@@ -1,5 +1,5 @@
 'use strict';
-
+const pool = require('../db/pool');
 
 /**
  * List queries
@@ -9,13 +9,24 @@
  **/
 exports.queries_history = function() {
   return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = {};
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
-    }
-  });
+    pool.query(`select * from ${process.env.MYSQL_LOOKUP_TABLE} ${process.env.MYSQL_LOOKUP_TABLE} ORDER BY lookup_timestamp DESC LIMIT 25`, (err, result) => {
+      if (err) {
+        reject({
+          message: 'Unable to query into db'
+        });      
+      } else {
+        console.log('result', result);
+        
+        resolve(result.map((row) => {
+          return {
+            addresses: JSON.parse(row.ipv4_addresses),
+            domain: row.domain_name,
+            created_at: row.lookup_timestamp,
+            client_ip: row.client_ip??''
+          }
+        }));
+      }
+    });
+});
 }
 
