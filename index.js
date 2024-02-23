@@ -4,10 +4,10 @@ var fs = require('fs'),
     path = require('path'),
     http = require('http');
 
+var swStats = require('swagger-stats');    
 var app = require('connect')();
-var swaggerTools = require('swagger-tools');
 var jsyaml = require('js-yaml');
-var serverPort = 8080;
+var serverPort = 3000;
 
 // swaggerRouter configuration
 var options = {
@@ -15,6 +15,15 @@ var options = {
   controllers: path.join(__dirname, './controllers'),
   useStubs: process.env.NODE_ENV === 'development' // Conditionally turn on stubs (mock mode)
 };
+
+var swaggerTools = require('swagger-tools');
+// Load your swagger specification 
+var apiSpec = require('./swagger.json');
+// Enable swagger-stats middleware in express app, passing swagger specification as option 
+app.use(swStats.getMiddleware({
+  swaggerSpec:apiSpec,
+  uriPath: '/metrics'
+}));
 
 // The Swagger document (require it, build it programmatically, fetch it from a URL, ...)
 var spec = fs.readFileSync(path.join(__dirname,'api/swagger.yaml'), 'utf8');
