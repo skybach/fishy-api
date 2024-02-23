@@ -1,24 +1,29 @@
 'use strict';
 
-var fs = require('fs'),
+const fs = require('fs'),
     path = require('path'),
     http = require('http');
+const swaggerTools = require('swagger-tools');
+const morgan = require('morgan');
 
-var swStats = require('swagger-stats');    
-var app = require('connect')();
-var jsyaml = require('js-yaml');
-var serverPort = 3000;
+const swStats = require('swagger-stats');    
+const app = require('connect')();
+const jsyaml = require('js-yaml');
+const serverPort = 3000;
 
 // swaggerRouter configuration
-var options = {
+const options = {
   swaggerUi: path.join(__dirname, '/swagger.json'),
   controllers: path.join(__dirname, './controllers'),
   useStubs: process.env.NODE_ENV === 'development' // Conditionally turn on stubs (mock mode)
 };
 
-var swaggerTools = require('swagger-tools');
+// Use morgan for logging
+app.use(morgan('combined'));
+
+// prometheus metrics
 // Load your swagger specification 
-var apiSpec = require('./swagger.json');
+const apiSpec = require('./swagger.json');
 // Enable swagger-stats middleware in express app, passing swagger specification as option 
 app.use(swStats.getMiddleware({
   swaggerSpec:apiSpec,
@@ -26,8 +31,8 @@ app.use(swStats.getMiddleware({
 }));
 
 // The Swagger document (require it, build it programmatically, fetch it from a URL, ...)
-var spec = fs.readFileSync(path.join(__dirname,'api/swagger.yaml'), 'utf8');
-var swaggerDoc = jsyaml.load(spec);
+const spec = fs.readFileSync(path.join(__dirname,'api/swagger.yaml'), 'utf8');
+const swaggerDoc = jsyaml.load(spec);
 
 // Initialize the Swagger middleware
 swaggerTools.initializeMiddleware(swaggerDoc, function (middleware) {
@@ -49,5 +54,5 @@ swaggerTools.initializeMiddleware(swaggerDoc, function (middleware) {
     console.log('Your server is listening on port %d (http://localhost:%d)', serverPort, serverPort);
     console.log('Swagger-ui is available on http://localhost:%d/docs', serverPort);
   });
-
+  
 });
