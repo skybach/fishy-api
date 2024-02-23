@@ -9,6 +9,6 @@ module.exports.info = function info (req, res, next) {
       utils.writeJson(res, response);
     })
     .catch(function (response) {
-      utils.writeJson(res, response);
+      utils.writeJson(res, response, 400);
     });
 };

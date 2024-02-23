@@ -9,7 +9,7 @@ const morgan = require('morgan');
 const swStats = require('swagger-stats');    
 const app = require('connect')();
 const jsyaml = require('js-yaml');
-const serverPort = 3000;
+const serverPort = 8080;
 
 // swaggerRouter configuration
 const options = {
