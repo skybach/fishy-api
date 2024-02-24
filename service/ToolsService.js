@@ -34,9 +34,8 @@ exports.lookup_domain = function (domain, clientIp) {
           // insert into db before resolving promise
           pool.query(`insert into ${process.env.MYSQL_LOOKUP_TABLE} (domain_name, ipv4_addresses, client_ip) values(?, ?, ?)`, [domain, JSON.stringify(payload.addresses), clientIp], (err, result) => {
             if (err) {
-              console.log(err)
               reject({
-                message: 'Unable to insert into db'
+                message: err
               });      
             } else {
               resolve(payload);

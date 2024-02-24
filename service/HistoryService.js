@@ -9,14 +9,12 @@ const pool = require('../db/pool');
  **/
 exports.queries_history = function() {
   return new Promise(function(resolve, reject) {
-    pool.query(`select * from ${process.env.MYSQL_LOOKUP_TABLE} ${process.env.MYSQL_LOOKUP_TABLE} ORDER BY lookup_timestamp DESC LIMIT 25`, (err, result) => {
+    pool.query(`select * from ${process.env.MYSQL_LOOKUP_TABLE} ${process.env.MYSQL_LOOKUP_TABLE} ORDER BY lookup_timestamp DESC LIMIT 20`, (err, result) => {
       if (err) {
         reject({
-          message: 'Unable to query into db'
+          message: err
         });      
       } else {
-        console.log('result', result);
-        
         resolve(result.map((row) => {
           return {
             addresses: JSON.parse(row.ipv4_addresses),
